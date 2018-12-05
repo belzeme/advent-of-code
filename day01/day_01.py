@@ -2,14 +2,10 @@
 # Load data to list
 
 from pathlib import Path
-from pprint import pprint
 
-loop = 0
 
-def parse_line(line):
-    op = line[:1]
-    value = int(line[1:].rstrip('\r\n'))
-    return op, value
+def parse_line(line: str):
+    return int(line.rstrip('\r\n'))
 
 
 def load_data():
@@ -17,29 +13,26 @@ def load_data():
         accu = [parse_line(line) for line in data]
     return accu
 
-def reduce_accu(accu):
-    reductor = 0
+
+def reduce_accumulator(accu: []):
+    result = 0
 
     for item in accu:
-        op, value = item
-        reductor = reductor + value if op is '+' else reductor - value
-    return reductor
+        result = result + item
+    return result
 
-def stack_accu(accu, reductor=0, stack=[]):
-    global loop
-    pprint('loop: {}'.format(loop))
-    loop += 1
+
+def stack_accumulator(accu: [], result=0, stack=[]):
     for item in accu:
-        op, value = item
-        reductor = reductor + value if op is '+' else reductor - value
-        if reductor in stack:
-            return reductor
-        stack.append(reductor)
-    return stack_accu(accu, reductor, stack)
+        result = result + item
+        if result in stack:
+            return result
+        stack.append(result)
+    return stack_accumulator(accu, result, stack)
 
 
 if __name__ == '__main__':
-    accu = load_data()
-    res = reduce_accu(accu)
-    print('resultat: {}'.format(res))
-    print('frequency reached twice: {}'.format(stack_accu(accu)))
+    accumulator = load_data()
+    res = reduce_accumulator(accumulator)
+    print('result: {}'.format(res))
+    print('frequency reached twice: {}'.format(stack_accumulator(accumulator)))
